@@ -1,2 +1,2 @@
 # Stingley_App
-Stingley project app and backend repository.
+Stingley project app and backend repository
