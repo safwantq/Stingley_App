@@ -9,7 +9,8 @@ import threading
 import numpy as np
 
 # Specify the y-values for the horizontal dashed lines
-maximum_threshold = 3   # Rename threshold_value to maximum_threshold
+# noisy state is around 800
+maximum_threshold = 3   # Rename threshold_value to maximum_threshold 
 moderate_threshold = 2    # Add moderate_threshold
 # Global variable to store the selected database path
 db_path = None
