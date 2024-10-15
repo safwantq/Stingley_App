@@ -20,6 +20,7 @@ def connect_db():
         raise ValueError("Database path is not set.")
     return sqlite3.connect(db_path)
 
+# can be canged using pandas, take a look at pandas_test.py for inspiration
 # Convert 12-hour format to 24-hour format for database queries
 def convert_to_24_hour(hour, minute, period):
     if period == "PM" and hour != 12:
