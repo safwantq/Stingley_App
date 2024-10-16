@@ -112,6 +112,7 @@ void reconnect() {
       Serial.println(" try again in 5 seconds");
       for (int i = 0; i < 10; i++) {
         blink_all();
+        delay(500);
       }
       //blink_all();
       //delay(4500);
