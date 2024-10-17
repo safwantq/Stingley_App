@@ -21,7 +21,6 @@ def connect_db():
         raise ValueError("Database path is not set.")
     return sqlite3.connect(db_path)
 
-# can be canged using pandas, take a look at pandas_test.py for inspiration
 # Convert 12-hour format to 24-hour format for database queries
 def convert_to_24_hour(hour, minute, period):
     if period == "PM" and hour != 12:
@@ -107,7 +106,7 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
 
 
     plt.figure(figsize=(9, 6))
-    plt.plot(times, scale, label=f'{table} Mic Levels')
+    plt.plot(times, mic_readings, label=f'{table} Mic Levels')
 
     # **Add the horizontal dashed lines**
     plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
