@@ -110,7 +110,7 @@ void reconnect() {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < 5; i++) { //Delay should add up to about 5 seconds, 2x500 ms 5 times per reconnect
         blink_all();
         delay(500);
       }
