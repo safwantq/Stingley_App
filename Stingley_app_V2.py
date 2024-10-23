@@ -7,6 +7,7 @@ import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 import threading
 import numpy as np
+import pandas as pd
 
 # Specify the y-values for the horizontal dashed lines
 # noisy state is around 800
@@ -64,22 +65,8 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
             times = [datetime.strptime(f'{row[1]} {row[0]}', '%Y-%m-%d %H:%M:%S') for row in data]
             mic_readings = [row[2] for row in data]
 
-            scale = []
-
-            for i in range(len(mic_readings)):
-                if mic_readings[i] < 200:
-                 scale.append(1)
-                elif mic_readings[i] < 400:
-                 scale.append(2)
-                elif mic_readings[i] < 600:
-                 scale.append(3)
-                elif mic_readings[i] < 800:
-                 scale.append(4)
-                else:
-                 scale.append(5)
-
             # Plot each table's data with a different color
-            plt.plot(times, scale, label=f'{table}', color=colors[idx % len(colors)], linewidth=1)
+            plt.plot(times, mic_readings, label=f'{table}', color=colors[idx % len(colors)], linewidth=1)
 
         # **Add the horizontal dashed lines**
         plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
@@ -107,25 +94,8 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
 
     mic_readings = [row[2] for row in data]
 
-   # print(mic_readings)
-    scale = []
-
-    for i in range(len(mic_readings)):
-        if mic_readings[i] < 200:
-            scale.append(1)
-        elif mic_readings[i] < 400:
-            scale.append(2)
-        elif mic_readings[i] < 600:
-            scale.append(3)
-        elif mic_readings[i] < 800:
-            scale.append(4)
-        else:
-            scale.append(5)
-        # elif mic_readings[i] == 0 and i >= 1:
-        #     scale[i] = scale[i-1]
-        
     plt.figure(figsize=(9, 6))
-    plt.plot(times, scale, label=f'{table} Mic Levels')
+    plt.plot(times, mic_readings, label=f'{table} Mic Levels')
 
     # **Add the horizontal dashed lines**
     plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
