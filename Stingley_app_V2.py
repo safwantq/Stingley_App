@@ -11,8 +11,8 @@ import pandas as pd
 
 # Specify the y-values for the horizontal dashed lines
 # noisy state is around 800
-maximum_threshold = 4   # Rename threshold_value to maximum_threshold 
-moderate_threshold = 2    # Add moderate_threshold
+maximum_threshold = 850  # Rename threshold_value to maximum_threshold 
+moderate_threshold = 400   # Add moderate_threshold
 # Global variable to store the selected database path
 db_path = None
 root = None  # Initialize root as a global variable
