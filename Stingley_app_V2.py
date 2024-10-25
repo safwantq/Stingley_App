@@ -11,8 +11,8 @@ import pandas as pd
 
 # Specify the y-values for the horizontal dashed lines
 # noisy state is around 800
-maximum_threshold = 850  # Rename threshold_value to maximum_threshold 
-moderate_threshold = 400   # Add moderate_threshold
+maximum_threshold = 360  # Rename threshold_value to maximum_threshold 
+moderate_threshold = 200   # Add moderate_threshold
 # Global variable to store the selected database path
 db_path = None
 root = None  # Initialize root as a global variable
@@ -50,65 +50,72 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
 
     if multiple_tables:
         # Create a single plot for multiple tables with different colors
-        plt.figure(figsize=(9, 6))
-        plt.title('Microphone Readings for Selected Tables', fontsize=16)
+        plt.figure(figsize=(12, 6))
+        plt.title('Average Microphone Readings for Selected Tables', fontsize=16)
 
         # Get a colormap with enough distinct colors
         num_colors = len(all_data)
-        cmap = plt.get_cmap('tab20')  # Or any other suitable colormap
+        cmap = plt.get_cmap('tab20')
         colors = [cmap(i) for i in np.linspace(0, 1, num_colors)]
 
         for idx, (data, table) in enumerate(all_data):
             if not data:
                 continue
-            # Extract times and mic_readings for each table
+
+            # Extract times and microphone readings
             times = [datetime.strptime(f'{row[1]} {row[0]}', '%Y-%m-%d %H:%M:%S') for row in data]
             mic_readings = [row[2] for row in data]
+            
+            # Calculate the average of every 300 readings and their corresponding times
+            avg_readings = [np.mean(mic_readings[i:i + 300]) for i in range(0, len(mic_readings), 300)]
+            avg_times = [times[i] for i in range(0, len(times), 300)]
+            
+            # Plot as bar chart with times on x-axis
+            plt.bar(avg_times, avg_readings, color=colors[idx % len(colors)], label=f'{table}', alpha=0.6, width=0.001)
+            plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
+            plt.axhline(y=moderate_threshold, color='orange', linestyle='--', linewidth=1, label=f'Moderate Threshold ({moderate_threshold})')
 
-            # Plot each table's data with a different color
-            plt.plot(times, mic_readings, label=f'{table}', color=colors[idx % len(colors)], linewidth=1)
+        # Add labels, legend, and grid
+        plt.xlabel('Time', fontsize=12)
+        plt.ylabel('Average Microphone Levels', fontsize=12)
+        plt.legend()
+        plt.grid(True)
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+        plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=1))
+        plt.gcf().autofmt_xdate()
+        plt.show()
+    
+    else:
+        # For a single table
+        if not data:
+            message_label.config(text="No data found for the selected range.", fg="red")
+            return
 
-        # **Add the horizontal dashed lines**
+        # Extract times and microphone readings
+        times = [datetime.strptime(f'{row[1]} {row[0]}', '%Y-%m-%d %H:%M:%S') for row in data]
+        mic_readings = [row[2] for row in data]
+        
+        # Calculate the average of every 300 readings and their corresponding times
+        avg_readings = [np.mean(mic_readings[i:i + 300]) for i in range(0, len(mic_readings), 300)]
+        avg_times = [times[i] for i in range(0, len(times), 300)]
+        
+        # Plot as bar chart with times on x-axis
+        plt.figure(figsize=(12, 6))
+        plt.title(f'Average Microphone Levels for {table}', fontsize=16)
+        plt.bar(avg_times, avg_readings, color='blue', alpha=0.6, width=0.002)
+        
         plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
         plt.axhline(y=moderate_threshold, color='orange', linestyle='--', linewidth=1, label=f'Moderate Threshold ({moderate_threshold})')
 
-        # Formatting the x-axis
-        plt.xlabel('Date and Time', fontsize=12)
-        plt.ylabel('Microphone Levels', fontsize=12)
+
+        # Add labels, legend, and grid
+        plt.xlabel('Time', fontsize=12)
+        plt.ylabel('Average Microphone Levels', fontsize=12)
         plt.grid(True)
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
+        plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=1))
         plt.gcf().autofmt_xdate()
-
-        # Add a legend to identify each table
-        plt.legend(loc='upper right', fontsize=10, title="Tables and Thresholds", title_fontsize=12)
-
-        # Show the plot
-        plt.tight_layout()
         plt.show()
-        return
-
-    # Single table plot
-    message_label.config(text="Plotting data...", fg="green")
-    times = [datetime.strptime(f'{row[1]} {row[0]}', '%Y-%m-%d %H:%M:%S') for row in data]
-
-    mic_readings = [row[2] for row in data]
-
-    plt.figure(figsize=(9, 6))
-    plt.plot(times, mic_readings, label=f'{table} Mic Levels')
-
-    # **Add the horizontal dashed lines**
-    plt.axhline(y=maximum_threshold, color='red', linestyle='--', linewidth=1, label=f'Maximum Threshold ({maximum_threshold})')
-    plt.axhline(y=moderate_threshold, color='orange', linestyle='--', linewidth=1, label=f'Moderate Threshold ({moderate_threshold})')
-
-    plt.xlabel('Date and Time')
-    plt.ylabel('Microphone Levels')
-    plt.title(f'Microphone Readings for {table}')
-    plt.grid(True)
-    plt.gcf().autofmt_xdate()
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-    plt.legend()
-    plt.show()
 
 # Export the plot
 def export_plot(data, table, message_label, multiple_tables=False, all_data=None):
