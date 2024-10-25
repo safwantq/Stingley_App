@@ -12,7 +12,7 @@ noise_level = 0
 avg_noise_level = 0
 mx = 0
 mn = 0
-
+#test
 def insert_data(table_name, mic_reading):
     # Connect to SQLite database
     conn = sqlite3.connect(db_path)
