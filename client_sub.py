@@ -3,7 +3,7 @@ import paho.mqtt.client as mqtt
 import sqlite3
 import os
 
-db_path = '/home/safwanpi/databases/current_database.db'
+db_path = '/home/admin/databases/current_database.db'
 
 MQTT_ADDRESS = '10.42.0.1'
 MQTT_TOPIC_ALL = 'test/#'
