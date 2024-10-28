@@ -14,7 +14,7 @@ from scipy.interpolate import interp1d
 # noisy state is around 800
 maximum_threshold = 350  # Rename threshold_value to maximum_threshold 
 moderate_threshold = 200  # Add moderate_threshold
-num_instances = 300
+num_instances = 60
 # Global variable to store the selected database path
 db_path = None
 root = None  # Initialize root as a global variable
@@ -73,8 +73,8 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
         plt.bar(table_names, table_averages, color='blue', alpha=0.6)
 
         # Add threshold lines for averaged data
-        plt.axhline(y=100, color='red', linestyle='--', linewidth=1, label=f' moustly loud')
-        plt.axhline(y=40, color='orange', linestyle='--', linewidth=1, label=f'normal')
+        plt.axhline(y=160, color='red', linestyle='--', linewidth=1, label=f' moustly loud')
+        plt.axhline(y=50, color='orange', linestyle='--', linewidth=1, label=f'normal')
 
         # Label axes and add grid
         plt.xlabel('Table Name', fontsize=12)
@@ -112,7 +112,7 @@ def plot_data(data, table, message_label, multiple_tables=False, all_data=None):
         # Set dynamic x-axis formatter based on time span
         if time_span < timedelta(hours=1):
             plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-            plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=1))
+            plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=2))
         elif time_span < timedelta(days=1):
             plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
             plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=1))
