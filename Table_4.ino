@@ -14,7 +14,7 @@ int avgnoiseLvl = 0;
 
 // Replace with your network credentials
 const char* ssid = "Stingley_noise_meter";
-const char* password = "12345678";
+const char* password = "BusyBee1962!";
 
 // Replace with your MQTT broker IP address (the Raspberry Pi IP)
 const char* mqtt_server = "10.42.0.1"; // Replace with Raspberry Pi's IP
